@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Histogram">
+        <attr name="numberOfBar" format="integer" />
+        <attr name="barStrokeSize" format="integer" />
+    </declare-styleable>
+</resources>

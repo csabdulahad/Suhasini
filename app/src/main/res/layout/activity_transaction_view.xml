@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".TransactionView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/soft_light"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <net.abdulahad.suhasini.helper.CircularTextView
+            android:id="@+id/day_month"
+            android:lines="2"
+            android:layout_marginEnd="16dp"
+            android:onClick="showDatePickerDialog"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:padding="4dp"
+            android:textSize="15sp"
+            android:textColor="@android:color/white" />
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".6"
+            android:orientation="vertical">
+
+            <net.abdulahad.suhasini.library.SwapTextView
+                android:textStyle="bold"
+                android:id="@+id/total_spending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/secondary"
+                android:textSize="17sp" />
+
+            <TextView
+                android:textSize="13sp"
+                android:id="@+id/day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center_vertical|end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".4"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:gravity="center"
+                style="@style/Widget.AppCompat.Button.Colored"
+                app:backgroundTint="@color/soft_light"
+                android:textColor="@android:color/black"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:onClick="previous"
+                android:textSize="19sp"
+                android:text="@string/sign_previous" />
+
+            <Button
+                android:gravity="center"
+                style="@style/Widget.AppCompat.Button.Colored"
+                app:backgroundTint="@color/soft_light"
+                android:textColor="@android:color/black"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="3dp"
+                android:onClick="next"
+                android:textSize="19sp"
+                android:text="@string/sign_next" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/trans_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/box" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="8dp"
+                android:text="No Data"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+</LinearLayout>

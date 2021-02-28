@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primaryColor">#3F51B5</color>
+    <color name="primaryVariant">#303F9F</color>
+
+    <color name="secondary">#2196F3</color>
+    <color name="secondaryVariant">#1976D2</color>
+
+    <color name="warning_yellow">#FDD835</color>
+    <color name="ok_green">#A5D6A7</color>
+
+    <color name="soft_light">#F7F7F7</color>
+    <color name="youtube_red">#FF0000</color>
+    <color name="soft_red">#C2185B</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="safe_green">#2E7D32</color>
+    <color name="pocket">#91DEF5</color>
+    <color name="cart">#FFC100</color>
+</resources>
