@@ -17,14 +17,15 @@ import java.util.ArrayList;
 
 public class LineChart extends View {
 
+    private boolean showLabel;
     private boolean rightBorder = true;
     private boolean bottomBorder = true;
 
     private final int defaultBarSize = 5;
-    private final int defaultBorderSize = 5;
+    private final int defaultBorderSize = 1;
     private float defaultTextSize;
 
-    private final int defaultBorderColor = Color.BLACK;
+    private final int defaultBorderColor = Color.GRAY;
     private final int defaultTextColor = Color.BLACK;
 
     private ArrayList<Float> progressList;
@@ -55,7 +56,6 @@ public class LineChart extends View {
         progressList = new ArrayList<>();
         barPaintList = new ArrayList<>();
 
-
         bound = new Rect();
 
         initBorderPaint();
@@ -75,15 +75,17 @@ public class LineChart extends View {
         textPaint.setColor(defaultTextColor);
     }
 
+    private void initBarPaint(Progress progress) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(progress.color);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(defaultBarSize);
+        barPaintList.add(paint);
+    }
+
     private void initBarPint(Progress... progresses) {
         barPaintList.clear();
-        for (Progress progress : progresses) {
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(progress.color);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(defaultBarSize);
-            barPaintList.add(paint);
-        }
+        for (Progress progress : progresses) initBarPaint(progress);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class LineChart extends View {
         int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
 
         int size = Math.min(width, height);
-        setMeasuredDimension(size, size);
+        setMeasuredDimension(width, height);
     }
 
     @Override
@@ -112,15 +114,17 @@ public class LineChart extends View {
 
         if (progressList.size() < 1) return;
 
-        for (int i = 1; i <= progressList.size(); i++) {
+        for (int i = 1; i <= barPaintList.size(); i++) {
             int key = i - 1;
             float barHeight = (float) (getHeight() / 100) * progressList.get(key);
             float offsetY = getHeight() - barHeight + defaultTextSize + bound.height();
             canvas.drawRect(gap * i, offsetY, gap * i, getHeight(), barPaintList.get(key));
 
-            String value = progressList.get(key) + "%";
-            textPaint.getTextBounds(value, 0, value.length(), bound);
-            canvas.drawText(value, gap * i - ((float) bound.width() / 2), offsetY - defaultTextSize, textPaint);
+            if (showLabel) {
+                String value = progressList.get(key) + "%";
+                textPaint.getTextBounds(value, 0, value.length(), bound);
+                canvas.drawText(value, gap * i - ((float) bound.width() / 2), offsetY - defaultTextSize, textPaint);
+            }
             // canvas.drawText("Abdul", gap * 1, offsetY - 16, textPaint);
         }
 
@@ -132,6 +136,18 @@ public class LineChart extends View {
         invalidate();
         requestLayout();
     }
+
+    public void setProgress(ArrayList<Progress> progresses) {
+        barPaintList.clear();
+        progressList.clear();
+        for (Progress progress : progresses) {
+            initBarPaint(progress);
+            progressList.add(progress.progress);
+        }
+        invalidate();
+        requestLayout();
+    }
+
 
     public void setBarSize(int barSize) {
         for (Paint paint : barPaintList) paint.setStrokeWidth(barSize);

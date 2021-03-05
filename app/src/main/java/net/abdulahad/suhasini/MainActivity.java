@@ -3,7 +3,9 @@ package net.abdulahad.suhasini;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,11 +47,14 @@ public class MainActivity extends AppCompatActivity {
     TextView tvSyncMessage;
     ImageButton ibSyncAction;
 
+    private LineChart lineChart;
+
     private double totalEarning;
     private double deposit;
     private double totalSpending;
 
     private ArrayList<Spending> spendingList;
+    private ArrayList<Double> spendingOfDay;
 
     @Override
     protected void onStart() {
@@ -65,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        lineChart = findViewById(R.id.spending_chart);
+
         syncViewBG = findViewById(R.id.sync_hint_bg);
         tvSyncMessage = findViewById(R.id.sync_message);
         ibSyncAction = findViewById(R.id.sync_action);
@@ -76,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         todayAtom = new AtomDate();
         spendingList = new ArrayList<>();
+        spendingOfDay = new ArrayList<>();
 
         RecyclerView rvSpending = findViewById(R.id.recycler_view_spending_by_category);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -92,11 +100,27 @@ public class MainActivity extends AppCompatActivity {
             loadCurrentDeposit(db);
             int totalSync = loadSyncCount(db);
             loadSpending(db);
+            loadSpendingChart(db);
             ExeSupplier.get().UIThread().execute(() -> {
                 updateAtAGlanceUI();
                 updateSyncUI(totalSync);
+                updateSpendingChart();
             });
         });
+    }
+
+    private void loadSpendingChart(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery(SqlQuery.QUERY_SPENDING_BY_DAY_OF_MONTH, new String[]{todayAtom.ISOYearMonth()});
+        if (cursor == null || cursor.getCount() < 1) {
+            DBHelper.closeCursor(cursor);
+            return;
+        }
+
+        spendingOfDay.clear();
+        while (cursor.moveToNext()) {
+            double amount = cursor.getDouble(1);
+            spendingOfDay.add(amount);
+        }
     }
 
     private void loadEarningOfMonth(SQLiteDatabase db) {
@@ -121,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         DBHelper.closeCursor(cursor);
     }
 
-    private int loadSyncCount(SQLiteDatabase db) {
+    private int loadSyncCount(SQLiteDatabase db)    {
         int totalSync = 0;
         String[] tables = {Key.TABLE_DEPOSIT, Key.TABLE_TRANSACTION};
         for (String table : tables) {
@@ -150,6 +174,14 @@ public class MainActivity extends AppCompatActivity {
         tvSyncMessage.setText(syncMessage);
         ibSyncAction.setImageResource(syncIcon);
         ibSyncAction.setTag(syncCount);
+    }
+
+    private void updateSpendingChart() {
+        ArrayList<LineChart.Progress> progressList = new ArrayList<>();
+        double unitSpending = totalSpending / 100;
+        for (double amount : spendingOfDay)
+            progressList.add(new LineChart.Progress((float) ((float) amount / unitSpending), getColor(R.color.secondary)));
+        lineChart.setProgress(progressList);
     }
 
     private void updateAtAGlanceUI() {
