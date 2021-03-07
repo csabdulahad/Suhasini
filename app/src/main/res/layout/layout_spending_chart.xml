@@ -11,7 +11,7 @@
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:paddingRight="16dp"
-        android:text="Spending graph"
+        android:text="Spending graph of days"
         android:textSize="18sp" />
 
     <net.abdulahad.suhasini.library.LineChart

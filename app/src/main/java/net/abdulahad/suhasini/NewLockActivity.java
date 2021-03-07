@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import net.abdulahad.suhasini.data.Key;
 import net.abdulahad.suhasini.helper.InputChecker;
 import net.abdulahad.suhasini.helper.PrefHelper;
+import net.abdulahad.suhasini.helper.ViewHelper;
 
 public class NewLockActivity extends AppCompatActivity {
 

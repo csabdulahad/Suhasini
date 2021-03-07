@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_sync_hint" />
+<!--        <include layout="@layout/layout_sync_hint" />-->
 
         <include layout="@layout/layout_earning_and_pocket" />
 

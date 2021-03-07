@@ -1,20 +1,20 @@
 package net.abdulahad.suhasini;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,8 +24,8 @@ import net.abdulahad.suhasini.data.SqlQuery;
 import net.abdulahad.suhasini.data.Suhasini;
 import net.abdulahad.suhasini.data.TransactionType;
 import net.abdulahad.suhasini.helper.DBHelper;
+import net.abdulahad.suhasini.helper.PrefHelper;
 import net.abdulahad.suhasini.helper.SwapTextHelper;
-import net.abdulahad.suhasini.helper.ViewHelper;
 import net.abdulahad.suhasini.library.AtomDate;
 import net.abdulahad.suhasini.library.LineChart;
 import net.abdulahad.suhasini.library.SwapTextView;
@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     /* sync hint views */
     View syncViewBG;
-    TextView tvSyncMessage;
-    ImageButton ibSyncAction;
+    TextView tvSyncMessage, tvLocalDBVersion;
+    ImageView ibSyncAction;
 
     private LineChart lineChart;
 
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Spending> spendingList;
     private ArrayList<Double> spendingOfDay;
+    private int syncCount = 0;
 
     @Override
     protected void onStart() {
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         syncViewBG = findViewById(R.id.sync_hint_bg);
         tvSyncMessage = findViewById(R.id.sync_message);
+        tvLocalDBVersion = findViewById(R.id.local_db_version);
         ibSyncAction = findViewById(R.id.sync_action);
 
         stvDeposit = findViewById(R.id.total_in_pocket);
@@ -98,15 +100,21 @@ public class MainActivity extends AppCompatActivity {
             SQLiteDatabase db = Suhasini.getDB(getApplicationContext());
             loadEarningOfMonth(db);
             loadCurrentDeposit(db);
-            int totalSync = loadSyncCount(db);
+            loadSyncCount(db);
             loadSpending(db);
             loadSpendingChart(db);
             ExeSupplier.get().UIThread().execute(() -> {
                 updateAtAGlanceUI();
-                updateSyncUI(totalSync);
+                updateSyncUI();
                 updateSpendingChart();
+                updateLocalDBVersion();
             });
         });
+    }
+
+    private void updateLocalDBVersion() {
+        int version = PrefHelper.getInt(this, Key.LOCAL_DB_VERSION, 0);
+        tvLocalDBVersion.setText(getString(R.string.local_db_version, version));
     }
 
     private void loadSpendingChart(SQLiteDatabase db) {
@@ -145,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
         DBHelper.closeCursor(cursor);
     }
 
-    private int loadSyncCount(SQLiteDatabase db)    {
-        int totalSync = 0;
+    private void loadSyncCount(SQLiteDatabase db) {
+        syncCount = 0;
         String[] tables = {Key.TABLE_DEPOSIT, Key.TABLE_TRANSACTION};
         for (String table : tables) {
             Cursor cursor = db.rawQuery(SqlQuery.getSyncCountQuery(table), null);
@@ -157,23 +165,29 @@ public class MainActivity extends AppCompatActivity {
             }
 
             cursor.moveToNext();
-            totalSync += cursor.getInt(0);
+            syncCount += cursor.getInt(0);
             cursor.close();
         }
-        return totalSync;
     }
 
-    private void updateSyncUI(int syncCount) {
+    private void updateSyncUI() {
         int syncIcon = syncCount == 0 ? R.drawable.ic_sync_down : R.drawable.ic_sync_up;
-        String syncMessage = syncCount > 0 ? getString(R.string.sync_to_be_done, syncCount) : getString(R.string.sync_no);
-        int bgColor = syncCount > 0 ? R.color.warning_yellow : R.color.ok_green;
-
-        if (syncCount > 0) ViewHelper.animateHeart(ibSyncAction, 0, 500);
-
-        syncViewBG.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), bgColor));
-        tvSyncMessage.setText(syncMessage);
         ibSyncAction.setImageResource(syncIcon);
-        ibSyncAction.setTag(syncCount);
+
+        String syncMessage = syncCount > 0 ? getString(R.string.sync_to_be_done, syncCount) : getString(R.string.sync_no);
+        tvSyncMessage.setText(syncMessage);
+
+        if (syncCount < 1) return;
+
+        ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(syncViewBG,
+                "backgroundColor",
+                new ArgbEvaluator(),
+                getColor(R.color.warn_start),
+                getColor(R.color.warn_end));
+        backgroundColorAnimator.setDuration(700);
+        backgroundColorAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        backgroundColorAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        backgroundColorAnimator.start();
     }
 
     private void updateSpendingChart() {
@@ -250,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void performSync(View view) {
         Intent intent = new Intent(this, SyncActivity.class);
-        int syncCount = (int) view.getTag();
         int syncType = syncCount > 0 ? SyncActivity.SYNC_PUSH : SyncActivity.SYNC_DOWN;
         intent.putExtra(SyncActivity.KEY_SYNC_TYPE, syncType);
         startActivity(intent);

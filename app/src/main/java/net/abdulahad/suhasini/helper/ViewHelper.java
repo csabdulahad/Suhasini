@@ -255,4 +255,12 @@ public abstract class ViewHelper {
         imageView.setColorFilter(colorId);
     }
 
+    public static void requestFocusAndKeyboard(EditText editText) {
+        editText.requestFocus();
+
+        InputMethodManager keyboard = (InputMethodManager)
+                editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.showSoftInput(editText, 0);
+    }
+
 }

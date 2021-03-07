@@ -16,9 +16,10 @@
     <string name="sync_hint_normal">Database syncing is in progress. Please stay on the screen. Don\'t navigate to any where.\n\nIt can be redone again.</string>
     <string name="sync_hint_failed">There has been error syncing the database. See error registry to find details about the error.</string>
     <string name="allowance_goal" formatted="true">Goal  %s</string>
-    <string name="sync_to_be_done" formatted="true">%d pending sync. Sync now.</string>
-    <string name="sync_no">Great! There is no pending sync.</string>
-    <string name="sync_message_no_sync_required">Great. It seems like that your local data is up to date with online database. No data needs to be pushed</string>
+    <string name="sync_to_be_done" formatted="true">%d pending sync</string>
+    <string name="local_db_version" formatted="true">Current DB version %d</string>
+    <string name="sync_no">No pending sync</string>
+    <string name="sync_message_no_sync_required">Great. It seems like that your local data is up to date with online database. No data needs to be pushed or downloaded.</string>
 
 
 </resources>

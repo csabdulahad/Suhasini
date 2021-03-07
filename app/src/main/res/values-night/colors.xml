@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <color name="black">#FFFFFF</color>
+    <color name="focus_bg">#232425</color>
+
+    <color name="warn_start">#00695C   </color>
+    <color name="warn_end">#004D40</color>
+
+
+</resources>
