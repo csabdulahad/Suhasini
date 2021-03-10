@@ -103,8 +103,6 @@ public class SyncActivity extends AppCompatActivity {
 
     public void next(View view) {
         finish();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
 }
