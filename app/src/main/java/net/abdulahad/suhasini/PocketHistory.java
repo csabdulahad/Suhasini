@@ -3,12 +3,10 @@ package net.abdulahad.suhasini;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +18,9 @@ import net.abdulahad.suhasini.data.Key;
 import net.abdulahad.suhasini.data.SqlQuery;
 import net.abdulahad.suhasini.data.Suhasini;
 import net.abdulahad.suhasini.library.AtomDate;
+import net.abdulahad.suhasini.library.BinarySpacesItemDecorator;
 import net.abdulahad.suhasini.model.Deposit;
 import net.abdulahad.suhasini.thread.ExeSupplier;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -34,33 +31,6 @@ public class PocketHistory extends AppCompatActivity {
 
     ArrayList<Deposit> depositList;
     AtomDate today;
-
-    public class BinarySpacesItemDecorator extends RecyclerView.ItemDecoration {
-
-        private final int space;
-
-        public BinarySpacesItemDecorator(int dimenId) {
-            this.space = getResources().getDimensionPixelSize(dimenId);
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, @NotNull View view, RecyclerView parent, @NotNull RecyclerView.State state) {
-
-            outRect.top = space;
-            outRect.bottom = 0;
-
-
-            boolean evenPos = parent.getChildLayoutPosition(view) % 2 == 0;
-            // Add top margin only for the first item to avoid double space between items
-            if (evenPos) {
-                outRect.right = space / 2;
-                outRect.left = space;
-            } else {
-                outRect.left = space / 2;
-                outRect.right = space;
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +49,7 @@ public class PocketHistory extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.addItemDecoration(new BinarySpacesItemDecorator(R.dimen.spacing));
+        recyclerView.addItemDecoration(new BinarySpacesItemDecorator(this, R.dimen.spacing));
     }
 
     @Override
@@ -102,7 +72,7 @@ public class PocketHistory extends AppCompatActivity {
             startActivity(intent);
         } else if (menuId == android.R.id.home) {
             finish();
-        } else if(menuId == R.id.action_adjust_deposit) {
+        } else if (menuId == R.id.action_adjust_deposit) {
             Intent intent = new Intent(this, AdjustDeposit.class);
             startActivity(intent);
         }

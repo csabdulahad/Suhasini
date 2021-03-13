@@ -49,7 +49,7 @@ public class AddTrans extends AppCompatActivity implements ItemSelectionListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         transTypeDialog = new TransTypeDialog(this);
-        transTypeDialog.setDialogTitle("Select Transaction Type");
+        transTypeDialog.setTitle("Select Transaction Type");
 
         ivTransIcon = findViewById(R.id.transaction_type_icon);
 
