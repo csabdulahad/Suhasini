@@ -27,12 +27,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:background="?android:attr/selectableItemBackground"
-            android:onClick="showPocket"
+            android:onClick="performAction"
             android:orientation="horizontal"
             android:paddingLeft="16dp"
             android:paddingTop="8dp"
             android:paddingRight="16dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            android:tag="pocket">
 
             <ImageView
                 android:layout_width="32dp"
@@ -71,9 +72,10 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackground"
-            android:onClick="adjustPocket"
+            android:onClick="performAction"
             android:padding="2dp"
             android:src="@drawable/ic_adjust"
+            android:tag="adjustPoc"
             app:tint="@color/black" />
 
     </LinearLayout>
@@ -93,12 +95,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:background="?android:attr/selectableItemBackground"
-            android:onClick="showTransaction"
+            android:onClick="performAction"
             android:orientation="horizontal"
             android:paddingLeft="16dp"
             android:paddingTop="8dp"
             android:paddingRight="16dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            android:tag="showTrans">
 
             <ImageView
                 android:layout_width="32dp"
@@ -137,9 +140,10 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackground"
-            android:onClick="addTransaction"
+            android:onClick="performAction"
             android:padding="2dp"
             android:src="@drawable/ic_add"
+            android:tag="addTrans"
             app:tint="@color/black" />
 
     </LinearLayout>
@@ -159,12 +163,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:background="?android:attr/selectableItemBackground"
-            android:onClick="showPocket"
+            android:onClick="performAction"
             android:orientation="horizontal"
             android:paddingLeft="16dp"
             android:paddingTop="8dp"
             android:paddingRight="16dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            android:tag="pocket">
 
             <ImageView
                 android:layout_width="32dp"
@@ -203,9 +208,10 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackground"
-            android:onClick="addDeposit"
+            android:onClick="performAction"
             android:padding="2dp"
             android:src="@drawable/ic_add"
+            android:tag="addDeposit"
             app:tint="@color/black" />
 
     </LinearLayout>
@@ -216,12 +222,13 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
-        android:background="?android:attr/selectableItemBackground"
-        android:onClick="performSync"
         android:id="@+id/sync_hint_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="?android:attr/selectableItemBackground"
+        android:onClick="performAction"
+        android:orientation="horizontal"
+        android:tag="performSync">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -258,7 +265,7 @@
                     android:id="@+id/local_db_version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Database version: 5"
+                    android:text="Database version: N/A"
                     android:textSize="12sp" />
 
             </LinearLayout>

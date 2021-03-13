@@ -14,6 +14,7 @@ import net.abdulahad.suhasini.data.Suhasini;
 import net.abdulahad.suhasini.helper.InputChecker;
 import net.abdulahad.suhasini.helper.PrefHelper;
 import net.abdulahad.suhasini.helper.ViewHelper;
+import net.abdulahad.suhasini.library.ProgressDialog;
 import net.abdulahad.suhasini.thread.ExeSupplier;
 
 import org.json.JSONObject;
@@ -28,10 +29,17 @@ import okhttp3.Response;
 public class Login extends AppCompatActivity {
     EditText etId, etPass;
 
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Authenticating credential...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(false);
 
         etId = findViewById(R.id.id);
         etPass = findViewById(R.id.password);
@@ -45,6 +53,7 @@ public class Login extends AppCompatActivity {
         String id = etId.getText().toString();
         String pass = etPass.getText().toString();
 
+        progressDialog.show();
         ExeSupplier.get().lightBGThread().execute(() -> {
             OkHttpClient client = new OkHttpClient();
 
@@ -69,6 +78,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void showToUI(String id, int result) {
+        progressDialog.dismiss();
         if (result != 1) {
             Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
             return;

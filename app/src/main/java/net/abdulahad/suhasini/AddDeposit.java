@@ -55,41 +55,6 @@ public class AddDeposit extends AppCompatActivity {
         ViewHelper.hideSoftKeyboard(this, ViewHelper.getRootView(this));
         saveDeposit();
         return true;
-/*
-
-        UrlHelper urlHelper = new UrlHelper(Key.URL_DEPOSIT_ADD);
-         urlHelper.addQueryParam("amount", amount);
-         urlHelper.addQueryParam("tag", tag);
-
-        ExeSupplier.get().lightBGThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder().url(urlHelper.getUrl()).build();
-
-                try (Response response = client.newCall(request).execute()) {
-
-                    JSONObject data = new JSONObject(response.body().string());
-
-                    int responseCode = data.getInt("code");
-
-                    ExeSupplier.get().UIThread().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (responseCode == 1) {
-                                finish();
-                                Toast.makeText(AddDepositActivity.this, "Deposit has been successful", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Snackbar.make(ViewHelper.getRootView(AddDepositActivity.this), "Failed to add transaction", BaseTransientBottomBar.LENGTH_INDEFINITE).show();
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-*/
     }
 
     private void saveDeposit() {

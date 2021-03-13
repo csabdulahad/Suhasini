@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -15,31 +13,26 @@ import androidx.annotation.Nullable;
 import net.abdulahad.suhasini.helper.ViewHelper;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class LineChart extends View {
 
-    private boolean showLabel;
-    private boolean rightBorder = true;
-    private boolean bottomBorder = true;
+    private Canvas canvas;
+
+    private boolean rightBorder = false;
+    private boolean bottomBorder = false;
 
     private final int defaultBarSize = 5;
     private final int defaultBorderSize = 1;
-    private float defaultTextSize;
 
     private final int defaultBorderColor = Color.GRAY;
-    private final int defaultTextColor = Color.BLACK;
+    private final int defaultBarColor = Color.RED;
 
     private ArrayList<Float> progressList;
 
-    private ArrayList<Paint> barPaintList;
-
     private Paint borderPaint;
-    private TextPaint textPaint;
-    private Rect bound;
-    private boolean fillChart = true;
+    private Paint barPaint;
 
-    Random random;
+    private boolean fillChart = true;
 
     public LineChart(Context context) {
         super(context);
@@ -57,16 +50,9 @@ public class LineChart extends View {
     }
 
     private void init() {
-        defaultTextSize = getResources().getDisplayMetrics().scaledDensity * 11;
         progressList = new ArrayList<>();
-        barPaintList = new ArrayList<>();
-
-        bound = new Rect();
-
         initBorderPaint();
-        initTextPaint();
-
-        random = new Random();
+        initBarPaint();
     }
 
     private void initBorderPaint() {
@@ -76,23 +62,11 @@ public class LineChart extends View {
         borderPaint.setColor(defaultBorderColor);
     }
 
-    private void initTextPaint() {
-        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTextSize(defaultTextSize);
-        textPaint.setColor(defaultTextColor);
-    }
-
-    private void initBarPaint(Progress progress) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(progress.color);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(defaultBarSize);
-        barPaintList.add(paint);
-    }
-
-    private void initBarPint(Progress... progresses) {
-        barPaintList.clear();
-        for (Progress progress : progresses) initBarPaint(progress);
+    private void initBarPaint() {
+        barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        barPaint.setColor(defaultBarColor);
+        barPaint.setStyle(Paint.Style.FILL);
+        barPaint.setStrokeWidth(defaultBarSize);
     }
 
     @Override
@@ -100,13 +74,14 @@ public class LineChart extends View {
         int width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
 
-        int size = Math.min(width, height);
         setMeasuredDimension(width, height);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if (this.canvas == null) this.canvas = canvas;
 
         // draw bottom border
         if (bottomBorder)
@@ -118,83 +93,56 @@ public class LineChart extends View {
 
         if (fillChart) drawFillChart(canvas);
         else drawStrokeChart(canvas);
-
-        if (progressList.size() < 1) return;
-
-        if (showLabel) {
-            //  calculate the gap
-            float gap = (float) (getWidth() / (progressList.size() + 1));
-            for (int i = 1; i <= barPaintList.size(); i++) {
-                int key = i - 1;
-                float barHeight = (float) (getHeight() / 100) * progressList.get(key);
-                float offsetY = getHeight() - barHeight + defaultTextSize + bound.height();
-                String value = progressList.get(key) + "%";
-                textPaint.getTextBounds(value, 0, value.length(), bound);
-                canvas.drawText(value, gap * i - ((float) bound.width() / 2), offsetY - defaultTextSize, textPaint);
-            }
-        }
-
     }
 
     private void drawFillChart(Canvas canvas) {
+        barPaint.setStyle(Paint.Style.FILL);
+
         float barSize = (float) getWidth() / progressList.size();
-        Log.d("ahad", "barSize" + barSize);
 
         float gap = 0;
-        for (int i = 0; i < barPaintList.size(); i++) {
-            int key = i;
-            float barHeight = (float) (getHeight() / 100) * progressList.get(key);
+        for (int i = 0; i < progressList.size(); i++) {
+            float barHeight = (float) (getHeight() / 100) * progressList.get(i);
             float offsetY = getHeight() - barHeight;
             gap = i * barSize;
 
-            Paint paint = barPaintList.get(key);
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(getRandomColor());
-            Log.d("ahad", "x : " + gap);
-
-            canvas.drawRect(gap, offsetY, gap + barSize, getHeight(), paint);
+            canvas.drawRect(gap, offsetY, gap + barSize, getHeight(), barPaint);
         }
     }
 
     private void drawStrokeChart(Canvas canvas) {
+        barPaint.setStyle(Paint.Style.STROKE);
+
         //  calculate the gap
         float gap = (float) (getWidth() / (progressList.size() + 1));
-        for (int i = 1; i <= barPaintList.size(); i++) {
+        for (int i = 1; i <= progressList.size(); i++) {
             int key = i - 1;
             float barHeight = (float) (getHeight() / 100) * progressList.get(key);
-            float offsetY = getHeight() - barHeight + defaultTextSize + bound.height();
-            canvas.drawRect(gap * i, offsetY, gap * i, getHeight(), barPaintList.get(key));
+            float offsetY = getHeight() - barHeight;
+            canvas.drawRect(gap * i, offsetY, gap * i, getHeight(), barPaint);
+        }
+    }
 
-            if (showLabel) {
-                String value = progressList.get(key) + "%";
-                textPaint.getTextBounds(value, 0, value.length(), bound);
-                canvas.drawText(value, gap * i - ((float) bound.width() / 2), offsetY - defaultTextSize, textPaint);
+    float duration = 2000;
+
+    private void animateBar() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.d("ahad", "Name" + Thread.currentThread().getName());
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            // canvas.drawText("Abdul", gap * 1, offsetY - 16, textPaint);
-        }
+        });
+        thread.start();
     }
 
-    public void setProgress(Progress... progresses) {
-        initBarPint(progresses);
-        for (Progress progress : progresses) progressList.add(progress.progress);
-        invalidate();
-        requestLayout();
-    }
-
-    public void setProgress(ArrayList<Progress> progresses) {
-        barPaintList.clear();
+    public void setProgress(ArrayList<Float> progresses) {
         progressList.clear();
-        for (Progress progress : progresses) {
-            initBarPaint(progress);
-            progressList.add(progress.progress);
-        }
-        invalidate();
-        requestLayout();
-    }
-
-
-    public void setBarSize(int barSize) {
-        for (Paint paint : barPaintList) paint.setStrokeWidth(barSize);
+        progressList.addAll(progresses);
         invalidate();
         requestLayout();
     }
@@ -205,12 +153,17 @@ public class LineChart extends View {
         requestLayout();
     }
 
+    public void setBarColor(int color) {
+        barPaint.setColor(color);
+        invalidate();
+        requestLayout();
+    }
+
     public void setBorderColor(int color) {
         borderPaint.setColor(color);
         invalidate();
         requestLayout();
     }
-
 
     public void setRightBorder(boolean rightBorder) {
         this.rightBorder = rightBorder;
@@ -226,21 +179,6 @@ public class LineChart extends View {
 
     public void animateView() {
         ViewHelper.animateHeart(this, 1, 400);
-    }
-
-    public static class Progress {
-        public float progress;
-        public int color;
-
-        public Progress(float progress, int color) {
-            this.progress = progress;
-            this.color = color;
-        }
-    }
-
-    private int getRandomColor() {
-        String[] colors = {"#FFDE03", "#0336FF", "#FF0266", "#4A148C", "#03A9F4", "#00BCD4", "#26A69A", "#00E676", "#E65100", "#607D8B"};
-        return Color.parseColor(colors[random.nextInt(colors.length - 1)]);
     }
 
 }

@@ -1,7 +1,9 @@
 package net.abdulahad.suhasini.helper;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
@@ -261,6 +263,19 @@ public abstract class ViewHelper {
         InputMethodManager keyboard = (InputMethodManager)
                 editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(editText, 0);
+    }
+
+    public static void flashBG(int colorId1, int colorId2, int duration, View view) {
+        Context context = view.getContext();
+        ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(view,
+                "backgroundColor",
+                new ArgbEvaluator(),
+                context.getColor(colorId1),
+                context.getColor(colorId2));
+        backgroundColorAnimator.setDuration(duration);
+        backgroundColorAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        backgroundColorAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        backgroundColorAnimator.start();
     }
 
 }
