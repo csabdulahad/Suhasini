@@ -1,6 +1,7 @@
 package net.abdulahad.suhasini.uiwork;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -9,16 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.abdulahad.suhasini.MainActivity;
 import net.abdulahad.suhasini.R;
+import net.abdulahad.suhasini.SpendingRatioDetail;
 import net.abdulahad.suhasini.adapter.SpendingAdapter;
 import net.abdulahad.suhasini.data.SqlQuery;
 import net.abdulahad.suhasini.data.TransactionType;
 import net.abdulahad.suhasini.library.AtomDate;
 import net.abdulahad.suhasini.model.Spending;
+import net.abdulahad.suhasini.protocol.ItemSelectionListener;
 import net.abdulahad.suhasini.protocol.UIWork;
 
 import java.util.ArrayList;
 
-public class SpendingRatioUIW extends UIWork {
+public class SpendingRatioUIW extends UIWork implements ItemSelectionListener {
 
     AtomDate todayAtom;
 
@@ -38,6 +41,7 @@ public class SpendingRatioUIW extends UIWork {
         rvSpending.setLayoutManager(layoutManager);
 
         spendingAdapter = new SpendingAdapter(activity.findViewById(R.id.spending_empty_view), rvSpending);
+        spendingAdapter.setListener(this);
         rvSpending.setAdapter(spendingAdapter);
     }
 
@@ -69,6 +73,14 @@ public class SpendingRatioUIW extends UIWork {
 
     public double getTotalSpending() {
         return totalSpending;
+    }
+
+    @Override
+    public void onItemSelected(int data) {
+        Spending spending = spendingAdapter.getSpending(data);
+        Intent intent = new Intent(activity, SpendingRatioDetail.class);
+        intent.putExtra(SpendingRatioDetail.KEY_SPENDING, spending);
+        activity.startActivity(intent);
     }
 
 }

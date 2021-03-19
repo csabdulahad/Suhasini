@@ -18,12 +18,15 @@ import net.abdulahad.suhasini.helper.NumberFormatHelper;
 import net.abdulahad.suhasini.helper.SwapTextHelper;
 import net.abdulahad.suhasini.library.SwapTextView;
 import net.abdulahad.suhasini.model.Spending;
+import net.abdulahad.suhasini.protocol.ItemSelectionListener;
 
 import java.util.ArrayList;
 
 public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.ViewHolder> {
 
     private final Context appContext;
+
+    private ItemSelectionListener listener;
 
     private final View emptyView;
     private final RecyclerView recyclerView;
@@ -48,10 +51,11 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.ViewHo
         if (totalSpending > 0) unitSpending = totalSpending / 100;
         else unitSpending = 1;
 
+        for (Spending spending : spendingList) spending.unitSpending = unitSpending;
+
         recyclerView.setVisibility(listShow);
         emptyView.setVisibility(emptyViewShow);
     }
-
 
     @NonNull
     @Override
@@ -64,7 +68,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Spending spending = spendingList.get(position);
-        SwapTextHelper.setMoneyToSTV(spending.total,  false, holder.amount, appContext);
+        SwapTextHelper.setMoneyToSTV(spending.total, false, holder.amount, appContext);
         holder.description.setText(spending.description);
         holder.icon.setImageResource(TransactionType.getIcon(spending.type));
 
@@ -82,7 +86,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.ViewHo
         return spendingList.size();
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public SwapTextView amount;
         public TextView description, percent;
         public ImageView icon;
@@ -96,7 +100,25 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.ViewHo
             description = itemView.findViewById(R.id.description);
             percent = itemView.findViewById(R.id.percent);
             icon = itemView.findViewById(R.id.icon);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onItemSelected(getAdapterPosition());
+                    }
+                }
+            });
         }
+    }
+
+    public Spending getSpending(int adapterPos) {
+        if (spendingList == null || spendingList.isEmpty() || adapterPos > spendingList.size() - 1)
+            return null;
+        return spendingList.get(adapterPos);
+    }
+
+    public void setListener(ItemSelectionListener listener) {
+        this.listener = listener;
     }
 
 }

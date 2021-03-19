@@ -35,12 +35,14 @@ public class PocketHistory extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        today = new AtomDate();
+
         setContentView(R.layout.activity_pocket_view);
         setTitle("Pocket history");
+        getSupportActionBar().setSubtitle(today.fullMonth());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         depositList = new ArrayList<>();
-        today = new AtomDate();
 
         recyclerView = findViewById(R.id.recycler_view);
         adapter = new DepositAdapter(findViewById(R.id.empty_view), recyclerView);
@@ -59,22 +61,10 @@ public class PocketHistory extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_pocket_history, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int menuId = item.getItemId();
-        if (menuId == R.id.action_add_deposit) {
-            Intent intent = new Intent(this, AddDeposit.class);
-            startActivity(intent);
-        } else if (menuId == android.R.id.home) {
+        if (menuId == android.R.id.home) {
             finish();
-        } else if (menuId == R.id.action_adjust_deposit) {
-            Intent intent = new Intent(this, AdjustDeposit.class);
-            startActivity(intent);
         }
         return true;
     }

@@ -44,6 +44,8 @@ public class SqlQuery {
 
     public static final String QUERY_SPENDING_BY_DAY_OF_MONTH = "SELECT strftime('%Y-%m-%d', trans.happened) as happen, sum(trans.amount) as amt FROM trans WHERE strftime('%Y-%m', trans.happened) = ? GROUP BY happen";
 
+    public static final String QUERY_SPENDING_OF_TYPE_BY_MONTH = "SELECT * FROM trans WHERE trans.type = ? AND strftime('%Y-%m', trans.happened) = ? ORDER BY trans.amount DESC";
+
     public static String getSyncCountQuery(String table) {
         return String.format("SELECT count(%s.sync) FROM %s WHERE %s.sync = 0", table, table, table);
     }

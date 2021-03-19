@@ -12,6 +12,7 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.Suhasini"
         android:usesCleartextTraffic="true">
+        <activity android:name=".SpendingRatioDetail"></activity>
         <activity android:name=".AdjustDeposit" />
         <activity android:name=".ConfigActivity" />
         <activity android:name=".ErrorActivity" />
@@ -30,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

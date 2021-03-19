@@ -23,6 +23,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
@@ -52,9 +53,8 @@
                     android:id="@+id/total_in_pocket"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/secondary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -67,13 +67,12 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:onClick="performAction"
-            android:padding="2dp"
+            android:padding="8dp"
             android:src="@drawable/ic_adjust"
             android:tag="adjustPoc"
             app:tint="@color/black" />
@@ -91,6 +90,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
@@ -120,9 +120,8 @@
                     android:id="@+id/total_spending"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/secondary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -135,13 +134,12 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:onClick="performAction"
-            android:padding="2dp"
+            android:padding="8dp"
             android:src="@drawable/ic_add"
             android:tag="addTrans"
             app:tint="@color/black" />
@@ -159,6 +157,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
@@ -188,9 +187,8 @@
                     android:id="@+id/total_earning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/secondary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -203,13 +201,12 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:onClick="performAction"
-            android:padding="2dp"
+            android:padding="8dp"
             android:src="@drawable/ic_add"
             android:tag="addDeposit"
             app:tint="@color/black" />
@@ -231,6 +228,7 @@
         android:tag="performSync">
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
@@ -257,9 +255,8 @@
                     android:id="@+id/sync_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/secondary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/local_db_version"
@@ -274,12 +271,11 @@
 
         <ImageView
             android:id="@+id/sync_action"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
-            android:padding="2dp"
-            android:src="@drawable/ic_add"
+            android:padding="8dp"
+            android:src="@drawable/ic_sync_up"
             app:tint="@color/black" />
 
     </LinearLayout>

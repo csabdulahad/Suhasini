@@ -43,6 +43,11 @@ public class AtomDate {
         return monthShortForm(month);
     }
 
+    /* @return the word for the month name. April, March  */
+    public String fullMonth() {
+        return monthFullForm(month);
+    }
+
     /* @return the name of the day in full form. Friday, Monday */
     public String fullNameOfDay() {
         switch (dayOfWeek) {
@@ -133,6 +138,35 @@ public class AtomDate {
                 return "Nov";
             default:
                 return "Dec";
+        }
+    }
+
+    private String monthFullForm(int month) {
+        switch (month) {
+            case 1:
+                return "January";
+            case 2:
+                return "February";
+            case 3:
+                return "March";
+            case 4:
+                return "April";
+            case 5:
+                return "May";
+            case 6:
+                return "June";
+            case 7:
+                return "July";
+            case 8:
+                return "August";
+            case 9:
+                return "September";
+            case 10:
+                return "October";
+            case 11:
+                return "November";
+            default:
+                return "December";
         }
     }
 

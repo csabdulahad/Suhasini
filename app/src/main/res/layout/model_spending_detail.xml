@@ -2,44 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp">
-
-
-    <ImageView
-        android:id="@+id/trans_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="16dp" />
+    android:padding="16dp"
+    android:orientation="horizontal">
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.7"
-        android:orientation="vertical">
+        android:layout_weight=".7">
 
         <net.abdulahad.suhasini.library.SwapTextView
-            android:id="@+id/trans_amount"
+            android:id="@id/amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
         <TextView
-            android:id="@+id/trans_tag"
+            android:id="@id/tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12sp" />
-
     </LinearLayout>
 
     <TextView
-        android:id="@+id/trans_time"
+        android:id="@id/date_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center_vertical|end"
         android:layout_weight=".3"
         android:gravity="end"
         android:textSize="12sp" />
