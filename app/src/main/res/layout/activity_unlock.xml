@@ -33,19 +33,11 @@
             android:id="@+id/pin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:defaultFocusHighlightEnabled="true"
             android:hint="Enter PIN"
+            android:importantForAutofill="no"
             android:inputType="numberPassword"
-            android:padding="16dp"
-            android:importantForAutofill="no" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:onClick="unlock"
-            android:text="Unlock" />
+            android:padding="16dp" />
     </LinearLayout>
 
 </FrameLayout>

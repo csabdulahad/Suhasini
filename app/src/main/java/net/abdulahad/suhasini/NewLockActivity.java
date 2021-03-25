@@ -21,6 +21,7 @@ public class NewLockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_lock);
         etPin = findViewById(R.id.pin);
+        ViewHelper.requestFocusAndKeyboard(etPin);
     }
 
     public void setPin(View view) {

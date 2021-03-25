@@ -258,11 +258,13 @@ public abstract class ViewHelper {
     }
 
     public static void requestFocusAndKeyboard(EditText editText) {
-        editText.requestFocus();
+        editText.postDelayed(() -> {
+            editText.requestFocus();
+            InputMethodManager keyboard = (InputMethodManager)
+                    editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            keyboard.showSoftInput(editText, 0);
+        }, 1000);
 
-        InputMethodManager keyboard = (InputMethodManager)
-                editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(editText, 0);
     }
 
     public static void flashBG(int colorId1, int colorId2, int duration, View view) {
